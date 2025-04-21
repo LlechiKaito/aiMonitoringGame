@@ -2,8 +2,9 @@ version: '3.8'
 
 services:
   db:
-    image: sqlite3
+    image: keinos/sqlite3
     container_name: sqlite_container
     volumes:
       - ./data:/data
-    command: sqlite3 /data/test.db
+    working_dir: /data
+    command: tail -f /dev/null  # コンテナを継続実行させる
