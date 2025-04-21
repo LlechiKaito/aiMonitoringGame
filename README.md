@@ -1,22 +1,39 @@
-Python 3.13.2
-DB: sqlite
+Python バージョン: 3.13.2  
+データベース: SQLite  
 ORM: SQLAlchemy
 
-<!-- pythonの環境構築 -->
-python3 -m venv enviroment
-source enviroment/bin/activate
-pip install -r requirements.txt
+<!-- Pythonの環境構築手順 -->
+1. 仮想環境を作成します:
+   ```bash
+   python3 -m venv environment
+   ```
+2. 仮想環境を有効化します:
+   ```bash
+   source environment/bin/activate
+   ```
+3. 必要なパッケージをインストールします:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-<!-- DBの環境構築 -->
-docker compose up
+<!-- データベースの環境構築手順 -->
+1. Dockerコンテナを起動します:
+   ```bash
+   docker compose up
+   ```
 
-<!-- test -->
-python gameEngine/test.py
-->display ok
-->not display not ok
+<!-- テストの実行 -->
+1. テストスクリプトを実行します:
+   ```bash
+   python gameEngine/test.py
+   ```
+   - 画面が表示されれば成功です。
+   - 画面が表示されない場合は失敗です。
 
-<!-- dbのコンテナの入り方 -->
-docker exec -it sqlite_container /bin/sh
+<!-- データベースコンテナへのアクセス方法 -->
+1. SQLiteコンテナに入るには以下のコマンドを使用します:
+   ```bash
+   docker exec -it sqlite_container /bin/sh
+   ```
 
-
-今、できていないのは、SQLAlchemyを使った、ORMでのDBの操作が可能かどうか？
+現在の課題: SQLAlchemyを使用してORMでデータベース操作が可能かどうかを確認する必要があります。
