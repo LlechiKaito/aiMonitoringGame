@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  db:
+    image: sqlite3
+    container_name: sqlite_container
+    volumes:
+      - ./data:/data
+    command: sqlite3 /data/test.db
