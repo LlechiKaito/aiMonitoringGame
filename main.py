@@ -4,6 +4,7 @@ import pyxel # SceneManager内でinitされますが、実行時エラー回避�
 from gameEngine.scene_manager import SceneManager
 from gameEngine.scenes.title_scene import TitleScene
 from gameEngine.scenes.game_scene import GameScene
+from gameEngine.scenes.menu_scene import MenuScene
 # PyxelUniversalFont の Writer は SceneManager 内で import されます
 
 # --- アプリケーション設定 ---
@@ -45,6 +46,7 @@ class MainApp:
         # シーンの登録
         self.scene_manager.add_scene('title', TitleScene)
         self.scene_manager.add_scene('game', GameScene)
+        self.scene_manager.add_scene('menu', MenuScene)
         # 他のシーンも同様に追加
 
         # 初期シーンの設定
