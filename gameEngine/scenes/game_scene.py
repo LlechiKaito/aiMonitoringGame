@@ -71,8 +71,9 @@ class GameScene(BaseScene):
 
         if pyxel.btnp(pyxel.KEY_T): # 例: Tキーでタイトルシーンへ遷移
             self.scene_manager.change_scene('title')
-        if pyxel.btnp(pyxel.KEY_M):
-            self.scene_manager.change_scene('menu')
+        
+        if pyxel.btnp(pyxel.KEY_E): # 例: Eキーでタイトルシーンへ遷移
+            self.scene_manager.change_scene('edit')
 
 
     def draw_checkerboard(self, x_offset, y_offset, width, height, color1, color2):
