@@ -1,7 +1,7 @@
 import pyxel
 from .base_scene import BaseScene
 from PyxelUniversalFont import Writer
-from gameEngine.utils.draw_button import draw_button
+from gameEngine.utils.custom_button import Button
 
 class EditScene(BaseScene):
     def __init__(self, scene_manager):
@@ -47,7 +47,7 @@ class EditScene(BaseScene):
             pyxel.quit()
         # ここも一旦ゲームシーンに移行するようにしておく
         if pyxel.btnp(pyxel.KEY_G):
-            self.scene_manager.change_scene("game_scene")
+            self.scene_manager.change_scene("game")
 
     def draw(self):
         pyxel.cls(0)
@@ -64,11 +64,43 @@ class EditScene(BaseScene):
         new_text_y = (self.play_area_height - self.explainfont_size) / 3 * 2
         self.writer.draw(new_text_x, new_text_y, self.new_text, self.explainfont_size, self.text_color)
         
-        # ボタンの描画
-        draw_button(self.cancel_button_x_start, self.cancel_button_y_start, self.cancel_button_width, self.cancel_button_height, self.cancel_button_color, self.text_color, self.cancel_text, self.button_font_size, self.writer)
-        draw_button(self.set_button_x_start, self.set_button_y_start, self.set_button_width, self.set_button_height, self.set_button_color, self.text_color, self.set_text, self.button_font_size, self.writer)
+        # ボタンの描画(文字表示されていないのとマウスカーソルでの移動になっていないため適用させる)
+        self.cancel_button = Button(
+            x=self.cancel_button_x_start, 
+            y=self.cancel_button_y_start, 
+            width=self.cancel_button_width, 
+            height=self.cancel_button_height, 
+            content=self.cancel_text, 
+            color_default=self.cancel_button_color, 
+            color_hover=self.cancel_button_color, 
+            color_pressed=self.cancel_button_color
+        )
+        self.cancel_button.update()
+        self.cancel_button.draw()
+
+        self.set_button = Button(
+            x=self.set_button_x_start, 
+            y=self.set_button_y_start, 
+            width=self.set_button_width, 
+            height=self.set_button_height, 
+            content=self.set_text, 
+            color_default=self.set_button_color, 
+            color_hover=self.set_button_color, 
+            color_pressed=self.set_button_color
+        )
+        self.set_button.update()
+        self.set_button.draw()
 
         # クロスボタンの描画
-        draw_button(self.cross_button_x_start, self.cross_button_y_start, self.cross_button_width, self.cross_button_height, self.cross_button_color, self.text_color, self.cross_text, self.button_font_size, self.writer)
-
-        
+        self.cross_button = Button(
+            x=self.cross_button_x_start, 
+            y=self.cross_button_y_start, 
+            width=self.cross_button_width, 
+            height=self.cross_button_height, 
+            content=self.cross_text, 
+            color_default=self.cross_button_color, 
+            color_hover=self.cross_button_color, 
+            color_pressed=self.cross_button_color
+        )
+        self.cross_button.update()
+        self.cross_button.draw()

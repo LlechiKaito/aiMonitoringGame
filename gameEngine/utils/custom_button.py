@@ -229,4 +229,4 @@ class App:
         # pyxel.text(10, 200, f"OutlinedHover:{self.outlined_text_button.is_hover}", 10)
 
 
-App()
+# App()
