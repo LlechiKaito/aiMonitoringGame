@@ -1,13 +1,14 @@
 import pyxel
 from .base_scene import BaseScene
 from PyxelUniversalFont import Writer
+from gameEngine.utils.draw_button import draw_button
 
 class EditScene(BaseScene):
     def __init__(self, scene_manager):
         super().__init__(scene_manager)
         self.font_path = "misaki_gothic.ttf"
         self.explainfont_size = 15  # フォントサイズを指定
-        self.button_font_size = 7  # フォントサイズを指定
+        self.button_font_size = 8  # フォントサイズを指定
         self.play_area_width = 256
         self.play_area_height = 144
         self.play_area_color = 1
@@ -16,18 +17,21 @@ class EditScene(BaseScene):
         self.cancel_button_y_start = 130
         self.cancel_button_width = 40
         self.cancel_button_height = 10
+        self.cancel_button_text_color = 10
         self.cancel_button_color = 2
 
         self.set_button_x_start = 210
         self.set_button_y_start = 130
         self.set_button_width = 40
         self.set_button_height = 10
+        self.set_button_text_color = 10
         self.set_button_color = 2
 
         self.cross_button_x_start = self.play_area_width - 15
         self.cross_button_y_start = 5
         self.cross_button_width = 10
         self.cross_button_height = 10
+        self.cross_button_text_color = 10
         self.cross_button_color = 2
 
         self.writer = Writer(self.font_path)
@@ -43,7 +47,7 @@ class EditScene(BaseScene):
             pyxel.quit()
         # ここも一旦ゲームシーンに移行するようにしておく
         if pyxel.btnp(pyxel.KEY_G):
-            self.scene_manager.set_scene("game_scene")
+            self.scene_manager.change_scene("game_scene")
 
     def draw(self):
         pyxel.cls(0)
@@ -61,23 +65,10 @@ class EditScene(BaseScene):
         self.writer.draw(new_text_x, new_text_y, self.new_text, self.explainfont_size, self.text_color)
         
         # ボタンの描画
-        pyxel.rect(self.cancel_button_x_start, self.cancel_button_y_start, self.cancel_button_width, self.cancel_button_height, self.cancel_button_color)
-        pyxel.rect(self.set_button_x_start, self.set_button_y_start, self.set_button_width, self.set_button_height, self.set_button_color)
-
-        # "キャンセル"と"設定"を中央揃え
-        cancel_x = self.cancel_button_x_start + (self.cancel_button_width - len(self.cancel_text) * self.button_font_size) / 2
-        cancel_y = self.cancel_button_y_start + (self.cancel_button_height - self.button_font_size) / 2
-        self.writer.draw(cancel_x, cancel_y, self.cancel_text, self.button_font_size)
-        
-        set_x = self.set_button_x_start + (self.set_button_width - len(self.set_text) * self.button_font_size) / 2
-        set_y = self.set_button_y_start + (self.set_button_height - self.button_font_size) / 2
-        self.writer.draw(set_x, set_y, self.set_text, self.button_font_size)
+        draw_button(self.cancel_button_x_start, self.cancel_button_y_start, self.cancel_button_width, self.cancel_button_height, self.cancel_button_color, self.text_color, self.cancel_text, self.button_font_size, self.writer)
+        draw_button(self.set_button_x_start, self.set_button_y_start, self.set_button_width, self.set_button_height, self.set_button_color, self.text_color, self.set_text, self.button_font_size, self.writer)
 
         # クロスボタンの描画
-        pyxel.rect(self.cross_button_x_start, self.cross_button_y_start, self.cross_button_width, self.cross_button_height, self.cross_button_color)
+        draw_button(self.cross_button_x_start, self.cross_button_y_start, self.cross_button_width, self.cross_button_height, self.cross_button_color, self.text_color, self.cross_text, self.button_font_size, self.writer)
 
-        # クロスボタンの文字の描画（中央揃え） 　ここは中央揃えに関しての処理を変える必要がある
-        cross_x = self.cross_button_x_start + (self.cross_button_width - len(self.cross_text) * self.button_font_size) / 2
-        cross_y = self.cross_button_y_start + (self.cross_button_height - self.button_font_size) / 2
-        self.writer.draw(cross_x, cross_y, self.cross_text, self.button_font_size)
         
