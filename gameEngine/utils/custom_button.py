@@ -6,29 +6,35 @@ class Button:
                  color_default, color_hover, color_pressed,
                  callback=None,
                  text_color=7, # デフォルト: 白
+                 font_size=8,
                  content_padding_x=0,
                  content_padding_y=0,
                  is_outlined=False, # 枠線のみ表示するかどうかのフラグ
+                 writer=None,
+                 is_pressed=False,
+                 is_hover=False
                  ):
         self.x = x
         self.y = y
         self.width = width
         self.height = height
+        self.content_padding_x = content_padding_x
+        self.content_padding_y = content_padding_y
         self.content = content
         self.color_default = color_default
         self.color_hover = color_hover
         self.color_pressed = color_pressed
         self.callback = callback
         self.text_color = text_color
-        self.content_padding_x = content_padding_x
-        self.content_padding_y = content_padding_y
         self.is_outlined = is_outlined # 枠線フラグを保存
+        self.font_size = font_size
 
-        self.is_hover = False
-        self.is_pressed = False
+        self.is_hover = is_hover
+        self.is_pressed = is_pressed
         self.current_color = color_default
 
         self.is_icon = isinstance(self.content, tuple)
+        self.writer = writer
 
     def update(self):
         mouse_x = pyxel.mouse_x
@@ -77,12 +83,17 @@ class Button:
                 pyxel.blt(icon_x, icon_y, img_idx, u, v, w, h)
         else:
             text_content = str(self.content)
-            text_width = len(text_content) * pyxel.FONT_WIDTH
-            text_height = pyxel.FONT_HEIGHT
+            text_width = len(text_content) * self.font_size
+            text_height = self.font_size
 
             text_x = self.x + (self.width - text_width) / 2 + self.content_padding_x
             text_y = self.y + (self.height - text_height) / 2 + self.content_padding_y
-            pyxel.text(text_x, text_y, text_content, self.text_color)
+
+            # 日本語の場合、上記のwriterを使う必要があるため
+            if self.writer is not None:
+                self.writer.draw(text_x, text_y, text_content, self.font_size, self.text_color)
+            else:
+                pyxel.text(text_x, text_y, text_content, self.text_color)
 
 # --- (Pyxel標準カラーパレットとsetup_image_bankは変更なしなので省略) ---
 # ... (前回のコードのカラーパレット定義とsetup_image_bank関数をここにコピーしてください) ...
