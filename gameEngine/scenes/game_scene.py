@@ -2,6 +2,7 @@
 import pyxel
 from PIL import ImageFont
 from PyxelUniversalFont import Writer # WriterインスタンスはSceneManager経由で渡される想定
+from gameEngine.utils.custom_button import Button
 
 from .base_scene import BaseScene
 
@@ -55,6 +56,11 @@ class GameScene(BaseScene):
             "操作",
             "会話",
             "編集"
+        ]
+        self.button_callback = [
+            lambda: print("操作ボタンが押されました"),
+            lambda: print("会話ボタンが押されました"),
+            lambda: self.scene_manager.change_scene('edit')
         ]
         self.menu_button_text_x_start = self.width - self.menu_area_width
         self.menu_button_text_y_start = 86
@@ -190,7 +196,23 @@ class GameScene(BaseScene):
 
         # ボタンの配置
         for i, text in enumerate(self.button_text):
-            self.writer.draw(self.menu_button_text_x_start + i * self.menu_button_text_x_space, self.menu_button_text_y_start, text, self.font_size, self.text_color)
+            button = Button(
+                x=self.menu_button_text_x_start + i * self.menu_button_text_x_space,
+                y=self.menu_button_text_y_start,
+                width=len(text) * self.font_size,  # ボタンの幅を適切に設定
+                height=self.font_size,  # ボタンの高さを適切に設定
+                content=text,
+                color_default=7,  # デフォルトの色
+                color_hover=6,  # ホバー時の色
+                color_pressed=5,  # 押下時の色
+                callback=self.button_callback[i],
+                text_color=self.text_color,
+                font_size=self.font_size,
+                is_pressed=True,
+                writer=self.writer
+            )
+            button.update()
+            button.draw()
 
 
     def on_enter(self, previous_scene_name=None, **kwargs):
