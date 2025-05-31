@@ -15,15 +15,15 @@ class EditScene(BaseScene):
 
         self.cancel_button_x_start = 160
         self.cancel_button_y_start = 130
-        self.cancel_button_width = 40
-        self.cancel_button_height = 10
+        self.cancel_button_width = 42
+        self.cancel_button_height = 12
         self.cancel_button_text_color = 10
         self.cancel_button_color = 2
 
         self.set_button_x_start = 210
         self.set_button_y_start = 130
-        self.set_button_width = 40
-        self.set_button_height = 10
+        self.set_button_width = 42
+        self.set_button_height = 12
         self.set_button_text_color = 10
         self.set_button_color = 2
 
@@ -33,14 +33,17 @@ class EditScene(BaseScene):
         self.cross_button_height = 10
         self.cross_button_text_color = 10
         self.cross_button_color = 2
+        self.cross_button_padding_x = 2
+        self.cross_button_padding_y = 1
 
-        self.writer = Writer(self.font_path)
         self.text_color = 10
         self.original_text = "元説明文"
         self.new_text = "新説明文"
         self.cancel_text = "キャンセル"
         self.set_text = "設定"
-        self.cross_text = "X"
+        self.cross_text = "x"
+
+        self.writer = Writer(self.font_path)
 
     def update(self):
         if pyxel.btnp(pyxel.KEY_Q):
@@ -73,7 +76,12 @@ class EditScene(BaseScene):
             content=self.cancel_text, 
             color_default=self.cancel_button_color, 
             color_hover=self.cancel_button_color, 
-            color_pressed=self.cancel_button_color
+            color_pressed=self.cancel_button_color,
+            callback=lambda: self.scene_manager.change_scene("game"),
+            text_color=self.cancel_button_text_color,
+            font_size=self.button_font_size,
+            writer=self.writer,
+            is_pressed=True
         )
         self.cancel_button.update()
         self.cancel_button.draw()
@@ -86,7 +94,12 @@ class EditScene(BaseScene):
             content=self.set_text, 
             color_default=self.set_button_color, 
             color_hover=self.set_button_color, 
-            color_pressed=self.set_button_color
+            color_pressed=self.set_button_color,
+            callback=lambda: print("設定ボタンが押されました(chat画面へ)"),
+            text_color=self.set_button_text_color,
+            font_size=self.button_font_size,
+            writer=self.writer,
+            is_pressed=True
         )
         self.set_button.update()
         self.set_button.draw()
@@ -98,9 +111,15 @@ class EditScene(BaseScene):
             width=self.cross_button_width, 
             height=self.cross_button_height, 
             content=self.cross_text, 
+            content_padding_x=self.cross_button_padding_x,
+            content_padding_y=self.cross_button_padding_y,
             color_default=self.cross_button_color, 
             color_hover=self.cross_button_color, 
-            color_pressed=self.cross_button_color
+            color_pressed=self.cross_button_color,
+            callback=lambda: pyxel.quit(),
+            text_color=self.cross_button_text_color,
+            font_size=self.button_font_size,
+            is_pressed=True
         )
         self.cross_button.update()
         self.cross_button.draw()
