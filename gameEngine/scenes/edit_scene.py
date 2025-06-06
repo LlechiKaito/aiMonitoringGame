@@ -103,23 +103,4 @@ class EditScene(BaseScene):
         )
         self.set_button.update()
         self.set_button.draw()
-
-        # クロスボタンの描画
-        self.cross_button = Button(
-            x=self.cross_button_x_start, 
-            y=self.cross_button_y_start, 
-            width=self.cross_button_width, 
-            height=self.cross_button_height, 
-            content=self.cross_text, 
-            content_padding_x=self.cross_button_padding_x,
-            content_padding_y=self.cross_button_padding_y,
-            color_default=self.cross_button_color, 
-            color_hover=self.cross_button_color, 
-            color_pressed=self.cross_button_color,
-            callback=lambda: pyxel.quit(),
-            text_color=self.cross_button_text_color,
-            font_size=self.button_font_size,
-            is_pressed=True
-        )
-        self.cross_button.update()
-        self.cross_button.draw()
+        
