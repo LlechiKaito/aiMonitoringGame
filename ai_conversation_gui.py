@@ -90,14 +90,14 @@ class AIConversationGUI:
         try:
             self.ai1 = Llama(
                 model_path=MODEL_PATH,
-                n_gpu_layers=-1,
+                n_gpu_layers=0,  # -1でエラーが起きる場合0に設定
                 n_ctx=8192,
                 verbose=False,
                 seed=-1,
             )
             self.ai2 = Llama(
                 model_path=MODEL_PATH,
-                n_gpu_layers=-1,
+                n_gpu_layers=0,  # -1でエラーが起きる場合0に設定
                 n_ctx=8192,
                 verbose=False,
                 seed=-1,
