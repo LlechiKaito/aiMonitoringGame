@@ -65,9 +65,27 @@ class AIConversationGUI:
             return os.path.join(sys._MEIPASS, relative_path)
         return os.path.join(os.path.abspath("."), relative_path)
 
+    def get_model_path(self, model_filename):
+        """ モデルファイルのパスを取得する（常に外部ファイルとして） """
+        # 実行ファイルのディレクトリを取得
+        if hasattr(sys, '_MEIPASS'):
+            # PyInstaller環境では、実行ファイルのディレクトリを基準にする
+            exe_dir = os.path.dirname(sys.executable)
+        else:
+            # 開発環境では、スクリプトのディレクトリを基準にする
+            exe_dir = os.path.dirname(os.path.abspath(__file__))
+        
+        return os.path.join(exe_dir, "models", model_filename)
+
     def load_ai_models(self):
         """AIモデルを読み込む"""
-        MODEL_PATH = self.get_resource_path("models/Llama-3-ELYZA-JP-8B-Q4_K_M.gguf")
+        MODEL_PATH = self.get_model_path("Llama-3-ELYZA-JP-8B-Q4_K_M.gguf")
+        
+        # モデルファイルの存在確認
+        if not os.path.exists(MODEL_PATH):
+            self.add_message("エラー", f"モデルファイルが見つかりません: {MODEL_PATH}", 8)
+            self.add_message("システム", "実行ファイルと同じディレクトリにmodelsフォルダを配置してください", 11)
+            return False
         
         try:
             self.ai1 = Llama(
