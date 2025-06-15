@@ -60,7 +60,7 @@ class GameScene(BaseScene):
         ]
         self.button_callback = [
             lambda: print("操作ボタンが押されました"),
-            lambda: self.scene_manager.change_scene('chat'),
+            lambda: self.scene_manager.change_scene('roll'),
             lambda: self.scene_manager.change_scene('edit')
         ]
         self.menu_button_text_x_start = self.width - self.menu_area_width
