@@ -5,6 +5,7 @@ from gameEngine.scene_manager import SceneManager
 from gameEngine.scenes.title_scene import TitleScene
 from gameEngine.scenes.game_scene import GameScene
 from gameEngine.scenes.edit_scene import EditScene
+from gameEngine.scenes.chat_scene import ChatScene
 # PyxelUniversalFont の Writer は SceneManager 内で import されます
 
 # --- アプリケーション設定 ---
@@ -47,6 +48,7 @@ class MainApp:
         self.scene_manager.add_scene('title', TitleScene)
         self.scene_manager.add_scene('game', GameScene)
         self.scene_manager.add_scene('edit', EditScene)
+        self.scene_manager.add_scene('chat', ChatScene)
         # 他のシーンも同様に追加
 
         # 初期シーンの設定
