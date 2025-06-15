@@ -1,9 +1,10 @@
 import pyxel
 from .base_scene import BaseScene
 
+
 class ChatScene(BaseScene):
     def __init__(self, scene_manager):
-        super().__init__(scene_manager)        
+        super().__init__(scene_manager)
         self.chat_area_width = 192
         self.chat_area_height = 104
         self.chat_area_color = 1
@@ -25,14 +26,19 @@ class ChatScene(BaseScene):
         # スライドバーの設定
         self.scroll_bar_width = 5
         self.scroll_bar_color = 7
+        self.scroll_bar_color_active = 8
+        
 
         # テキストの高さを考慮
         self.text_size = 8
         self.text_color = 7
-        
+
         # チャットテキストの表示開始インデックスを計算
-        self.max_visible_lines = (self.chat_area_height - self.y_padding * 2) // self.text_size
+        self.max_visible_lines = (
+            self.chat_area_height - self.y_padding * 2) // self.text_size
         self.start_index = max(0, len(self.chat_text) - self.max_visible_lines)
+
+        self.roll_text = scene_manager._scene_args["roll_text"]
 
     def update(self):
         # キー入力を処理して入力文字列を更新
@@ -43,11 +49,11 @@ class ChatScene(BaseScene):
         if pyxel.btnp(pyxel.KEY_BACKSPACE) and len(self.input_text) > 0:
             self.input_text = self.input_text[:-1]
         if pyxel.btnp(pyxel.KEY_RETURN):
-            self.chat_text.append(self.input_text)
+            self.chat_text.append({self.roll_text: self.input_text})
+            self.chat_text.append({"aite": "aite message"})
             self.input_text = ""
             if len(self.chat_text) > self.max_visible_lines:
-                self.scroll_offset = min(
-                    len(self.chat_text) - self.max_visible_lines, self.scroll_offset + 1)
+                self.scroll_offset = max(0, len(self.chat_text) - self.max_visible_lines)
 
         # スクロールオフセットを保持するための変数
         if not hasattr(self, 'scroll_offset'):
@@ -67,8 +73,14 @@ class ChatScene(BaseScene):
                    self.chat_area_height, self.chat_area_color)
 
         # スクロールオフセットを考慮してテキストを描画
-        for i, text in enumerate(self.chat_text[self.scroll_offset:self.scroll_offset + self.max_visible_lines]):
-            pyxel.text(start_x + self.x_padding, start_y + self.y_padding + (i * self.text_size), text, self.text_color)
+        for i, chat_entry in enumerate(self.chat_text[self.scroll_offset:self.scroll_offset + self.max_visible_lines]):
+            for key, value in chat_entry.items():
+                if key == "aite":
+                    pyxel.text(start_x + self.x_padding, start_y + self.y_padding +
+                               (i * self.text_size), f"{key}: {value}", self.text_color)
+                else:
+                    pyxel.text(start_x + self.chat_area_width - (len(f"{key}: {value}")) * self.chat_input_area_text_size // 2 - self.x_padding - self.scroll_bar_width,
+                               start_y + self.y_padding + (i * self.text_size), f"{key}: {value}", self.text_color)
 
         # スライドバーの描画
         scroll_bar_x = start_x + self.chat_area_width - self.scroll_bar_width
@@ -82,15 +94,19 @@ class ChatScene(BaseScene):
             indicator_height = max(
                 10, scroll_bar_height * self.max_visible_lines // len(self.chat_text))
             indicator_y = scroll_bar_y + (scroll_bar_height - indicator_height) * \
-                self.scroll_offset // (len(self.chat_text) - self.max_visible_lines)
+                self.scroll_offset // (len(self.chat_text) -
+                                       self.max_visible_lines)
             pyxel.rect(scroll_bar_x, indicator_y,
-                       self.scroll_bar_width, indicator_height, self.scroll_bar_color)
+                       self.scroll_bar_width, indicator_height, self.scroll_bar_color_active)
 
         input_start_x = (self.screen_width - self.chat_input_area_width) // 2
-        input_start_y = (self.screen_height - self.chat_input_area_height) - self.chat_input_bottom_margin
+        input_start_y = (
+            self.screen_height - self.chat_input_area_height) - self.chat_input_bottom_margin
         pyxel.rect(input_start_x, input_start_y, self.chat_input_area_width,
                    self.chat_input_area_height, self.chat_input_area_color)
-        pyxel.text(input_start_x + self.chat_input_area_x_padding, input_start_y + self.chat_input_area_y_padding, ">", self.chat_input_area_text_color)  # 入力プロンプトを表示
+        pyxel.text(input_start_x + self.chat_input_area_x_padding, input_start_y +
+                   self.chat_input_area_y_padding, ">", self.chat_input_area_text_color)  # 入力プロンプトを表示
 
         # 入力された文字列を表示
-        pyxel.text(input_start_x + self.chat_input_area_x_padding, input_start_y + self.chat_input_area_y_padding, self.input_text, self.chat_input_area_text_color)
+        pyxel.text(input_start_x + self.chat_input_area_x_padding + self.chat_input_area_text_size,
+                   input_start_y + self.chat_input_area_y_padding, self.input_text, self.chat_input_area_text_color)
