@@ -1,0 +1,71 @@
+import flet as ft
+import sys
+import os
+import subprocess
+import socket
+import pyxel_app  # 作成したPyxelモジュールをインポート
+from sample_page1 import sample_page1
+from sample_page2 import sample_page2
+
+def main(page: ft.Page):
+    page.title = "Flet仮想デスクトップ"
+    page.window_width = 400
+    page.window_height = 300
+    page.vertical_alignment = ft.MainAxisAlignment.CENTER
+    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+
+    pyxel_proc = None
+
+    # --- 画面遷移用関数 ---
+    def show_initial_screen(e=None):  # ←ここを修正
+        page.controls.clear()
+        pyxel_btn = ft.ElevatedButton("Pyxel起動", on_click=on_start_pyxel)
+        input_btn = ft.ElevatedButton("文字列入力", on_click=show_input_screen)
+        sample1_btn = ft.ElevatedButton("サンプルページ1", on_click=lambda e: sample_page1(page, show_initial_screen))
+        sample2_btn = ft.ElevatedButton("サンプルページ2", on_click=lambda e: sample_page2(page, show_initial_screen))
+        page.add(
+            ft.Column(
+                [pyxel_btn, input_btn, sample1_btn, sample2_btn],
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                spacing=20
+            )
+        )
+        page.update()
+
+    def show_input_screen(e=None):
+        page.controls.clear()
+        text_field = ft.TextField(
+            label="メッセージを入力してください...",
+            width=300
+        )
+        def on_send(ev):
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            sock.sendto(text_field.value.encode("utf-8"), ("127.0.0.1", 50007))
+            sock.close() 
+            text_field.value = ""
+            text_field.update()
+        send_btn = ft.ElevatedButton("送信", on_click=on_send)
+        back_btn = ft.ElevatedButton("戻る", on_click=lambda e: show_initial_screen())
+        page.add(
+            ft.Column(
+                [text_field, ft.Row([send_btn, back_btn], alignment=ft.MainAxisAlignment.CENTER)],
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                spacing=20
+            )
+        )
+        page.update()
+
+    def on_start_pyxel(e):
+        nonlocal pyxel_proc
+        if pyxel_proc is None or pyxel_proc.poll() is not None:
+            pyxel_proc = subprocess.Popen([sys.executable, __file__, "run_pyxel"])
+
+    # 初期画面表示
+    show_initial_screen()
+
+# --- プログラムのエントリーポイント ---
+if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1] == "run_pyxel":
+        pyxel_app.run_pyxel_app() 
+    else:
+        ft.app(target=main)
