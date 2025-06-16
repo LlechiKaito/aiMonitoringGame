@@ -29,6 +29,7 @@ def run_pyxel_app():
     class App:
         def __init__(self):
             pyxel.init(200, 100, title="Pyxel受信画面")
+            pyxel.load("sample.pyxres")  # 追加: 背景リソースを読み込む
             self.message = ""
             self.player = Player()  # プレイヤー生成
             threading.Thread(target=udp_listener, daemon=True).start()
@@ -41,6 +42,8 @@ def run_pyxel_app():
 
         def draw(self):
             pyxel.cls(0)
+            # 追加: マップ(背景)を描画
+            pyxel.bltm(0, 0, 0, 0, 0, pyxel.width, pyxel.height)
             msg = self.message
             x = max(0, (200 - pyxel.FONT_WIDTH * len(msg)) // 2)
             y = 45

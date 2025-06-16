@@ -58,7 +58,11 @@ def main(page: ft.Page):
     def on_start_pyxel(e):
         nonlocal pyxel_proc
         if pyxel_proc is None or pyxel_proc.poll() is not None:
-            pyxel_proc = subprocess.Popen([sys.executable, __file__, "run_pyxel"])
+            # 開発時
+            # pyxel_proc = subprocess.Popen([sys.executable, __file__, "run_pyxel"])
+
+            # ビルド時
+            pyxel_proc = subprocess.Popen([sys.executable, "run_pyxel"])
 
     # 初期画面表示
     show_initial_screen()
