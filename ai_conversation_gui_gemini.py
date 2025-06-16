@@ -83,18 +83,6 @@ class AIConversationGUI:
             return os.path.join(sys._MEIPASS, relative_path)
         return os.path.join(os.path.abspath("."), relative_path)
 
-    def get_model_path(self, model_filename):
-        """ モデルファイルのパスを取得する（常に外部ファイルとして） """
-        # 実行ファイルのディレクトリを取得
-        if hasattr(sys, '_MEIPASS'):
-            # PyInstaller環境では、実行ファイルのディレクトリを基準にする
-            exe_dir = os.path.dirname(sys.executable)
-        else:
-            # 開発環境では、スクリプトのディレクトリを基準にする
-            exe_dir = os.path.dirname(os.path.abspath(__file__))
-        
-        return os.path.join(exe_dir, "models", model_filename)
-
     # gemini_generate 関数を丸ごと置き換え
     def gemini_generate(self, prompt, stream=False, max_tokens=512, temperature=0.4):
         """Gemini APIでテキスト生成 (SDK版)"""
