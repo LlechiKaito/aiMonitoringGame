@@ -1,5 +1,5 @@
 import flet as ft
-from objects.object_detail import object_detail
+from .object_detail import object_detail
 
 def object_list(page, back_callback):
     # オブジェクトリスト（人・部屋など）

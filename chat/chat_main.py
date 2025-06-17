@@ -1,5 +1,5 @@
 import flet as ft
-from chat_detail import chat_detail  # 追加
+from chat.chat_detail import chat_detail
 
 # object_list.pyのobjectsから人間のみ抜粋
 USERS = [

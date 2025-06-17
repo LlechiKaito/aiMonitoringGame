@@ -4,8 +4,8 @@ import os
 import subprocess
 import socket
 import pyxel_app  # 作成したPyxelモジュールをインポート
-from object_list import object_list
-from chat_main import chat_main
+from objects.object_list import object_list
+from chat.chat_main import chat_main
 
 def main(page: ft.Page):
     page.title = "Flet仮想デスクトップ"
