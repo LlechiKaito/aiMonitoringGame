@@ -4,7 +4,7 @@ import os
 import subprocess
 import socket
 import pyxel_app  # 作成したPyxelモジュールをインポート
-from sample_page1 import sample_page1
+from object_list import object_list
 from sample_page2 import sample_page2
 
 def main(page: ft.Page):
@@ -21,11 +21,11 @@ def main(page: ft.Page):
         page.controls.clear()
         pyxel_btn = ft.ElevatedButton("Pyxel起動", on_click=on_start_pyxel)
         input_btn = ft.ElevatedButton("文字列入力", on_click=show_input_screen)
-        sample1_btn = ft.ElevatedButton("サンプルページ1", on_click=lambda e: sample_page1(page, show_initial_screen))
+        list_btn = ft.ElevatedButton("リスト", on_click=lambda e: object_list(page, show_initial_screen))
         sample2_btn = ft.ElevatedButton("サンプルページ2", on_click=lambda e: sample_page2(page, show_initial_screen))
         page.add(
             ft.Column(
-                [pyxel_btn, input_btn, sample1_btn, sample2_btn],
+                [pyxel_btn, input_btn, list_btn, sample2_btn],
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 spacing=20
             )
@@ -59,10 +59,10 @@ def main(page: ft.Page):
         nonlocal pyxel_proc
         if pyxel_proc is None or pyxel_proc.poll() is not None:
             # 開発時
-            # pyxel_proc = subprocess.Popen([sys.executable, __file__, "run_pyxel"])
+            pyxel_proc = subprocess.Popen([sys.executable, __file__, "run_pyxel"])
 
             # ビルド時
-            pyxel_proc = subprocess.Popen([sys.executable, "run_pyxel"])
+            # pyxel_proc = subprocess.Popen([sys.executable, "run_pyxel"])
 
     # 初期画面表示
     show_initial_screen()
