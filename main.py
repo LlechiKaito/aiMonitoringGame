@@ -5,7 +5,7 @@ import subprocess
 import socket
 import pyxel_app  # 作成したPyxelモジュールをインポート
 from object_list import object_list
-from sample_page2 import sample_page2
+from chat_main import chat_main
 
 def main(page: ft.Page):
     page.title = "Flet仮想デスクトップ"
@@ -22,7 +22,7 @@ def main(page: ft.Page):
         pyxel_btn = ft.ElevatedButton("Pyxel起動", on_click=on_start_pyxel)
         input_btn = ft.ElevatedButton("文字列入力", on_click=show_input_screen)
         list_btn = ft.ElevatedButton("リスト", on_click=lambda e: object_list(page, show_initial_screen))
-        sample2_btn = ft.ElevatedButton("サンプルページ2", on_click=lambda e: sample_page2(page, show_initial_screen))
+        sample2_btn = ft.ElevatedButton("チャット", on_click=lambda e: chat_main(page, show_initial_screen))
         page.add(
             ft.Column(
                 [pyxel_btn, input_btn, list_btn, sample2_btn],
