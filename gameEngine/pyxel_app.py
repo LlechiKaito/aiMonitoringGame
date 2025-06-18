@@ -3,7 +3,7 @@
 import pyxel
 import socket
 import threading
-from player import Player  # 追加
+from gameEngine.player import Player  # 追加
 
 def run_pyxel_app():
     """Pyxelアプリケーションを初期化し、実行するメイン関数"""
