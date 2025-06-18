@@ -2,7 +2,7 @@ import flet as ft
 from objects.object_detail import object_detail
 
 def object_list(page, back_callback):
-    # オブジェクトリスト（人・部屋など）
+    # オブジェクト（人・部屋・車など）のリスト
     objects = [
         {"type": "person", "name": "田中 太郎", "age": 28, "job": "エンジニア"},
         {"type": "person", "name": "佐藤 花子", "age": 34, "job": "デザイナー"},
@@ -16,7 +16,7 @@ def object_list(page, back_callback):
         {"type": "person", "name": "渡辺 大輔", "age": 38, "job": "ディレクター"},
         {"type": "person", "name": "松本 佳奈", "age": 24, "job": "アナリスト"},
         {"type": "person", "name": "斎藤 剛", "age": 36, "job": "プロデューサー"},
-        # ここから物の例
+        # 以下は物の例（部屋・車など）
         {"type": "room", "name": "子供部屋", "status": "空室"},
         {"type": "room", "name": "リビング", "status": "在室"},
         {"type": "car", "name": "社用車A", "status": "駐車場"},
@@ -25,8 +25,10 @@ def object_list(page, back_callback):
     page.controls.clear()
 
     def on_object_click(e, obj):
+        # オブジェクト選択時に詳細画面へ遷移
         object_detail(page, obj, lambda e=None: object_list(page, back_callback))
 
+    # オブジェクト名のリスト表示（クリックで詳細へ）
     name_list = ft.ListView(
         controls=[
             ft.ListTile(

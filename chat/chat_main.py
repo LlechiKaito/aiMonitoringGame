@@ -1,7 +1,7 @@
 import flet as ft
 from chat.chat_detail import chat_detail
 
-# object_list.pyのobjectsから人間のみ抜粋
+# 人間ユーザーのリスト（object_list.pyのobjectsから抽出）
 USERS = [
     {"name": "田中 太郎", "age": 28, "job": "エンジニア"},
     {"name": "佐藤 花子", "age": 34, "job": "デザイナー"},
@@ -17,7 +17,7 @@ USERS = [
     {"name": "斎藤 剛", "age": 36, "job": "プロデューサー"},
 ]
 
-# 1人分だけ適当なチャット履歴
+# 各ユーザーの最新チャットメッセージ（現状は田中 太郎のみダミーデータあり）
 latest_messages = {
     "田中 太郎": "こんにちは！お元気ですか？",
     "佐藤 花子": "",
@@ -34,10 +34,15 @@ latest_messages = {
 }
 
 def chat_main(page, back_callback):
+    """
+    チャットメイン画面を表示する関数。
+    ユーザーリストを表示し、ユーザー選択でチャット詳細画面へ遷移。
+    """
     page.controls.clear()
 
     def on_user_click(e, user):
-        chat_detail(page, user, lambda e=None: chat_main(page, back_callback))  # チャット詳細画面へ
+        # ユーザー選択時にチャット詳細画面へ遷移
+        chat_detail(page, user, lambda e=None: chat_main(page, back_callback))
 
     user_list = ft.ListView(
         controls=[
