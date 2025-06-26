@@ -8,7 +8,9 @@ import sys
 import os
 
 # srcディレクトリをPythonパスに追加
-sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
+current_dir = os.path.dirname(os.path.abspath(__file__))
+src_dir = os.path.join(current_dir, 'src')
+sys.path.insert(0, src_dir)
 
 if __name__ == "__main__":
     print("🚀 AI Monitoring Game Backend を起動中...")
