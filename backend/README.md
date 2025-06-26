@@ -27,6 +27,16 @@ uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
 - Swagger UI: http://localhost:8000/docs
 - ReDoc: http://localhost:8000/redoc
 
+## データストレージ
+
+このプロジェクトでは、CSVファイルをデータベースの代わりに使用しています：
+
+- `data/objects.csv` - オブジェクトデータ
+- `data/memories.csv` - メモリデータ
+- `data/summaries.csv` - サマリーデータ
+
+各CSVファイルは自動的に作成され、データの永続化が行われます。
+
 ## API エンドポイント
 
 ### 基本エンドポイント
@@ -123,11 +133,18 @@ backend/
 │   │   ├── models.py        # データモデル
 │   │   ├── service.py       # ビジネスロジック
 │   │   └── router.py        # APIエンドポイント
-│   └── summaries/           # サマリー関連モジュール
+│   ├── summaries/           # サマリー関連モジュール
+│   │   ├── __init__.py
+│   │   ├── models.py        # データモデル
+│   │   ├── service.py       # ビジネスロジック
+│   │   └── router.py        # APIエンドポイント
+│   └── utils/               # ユーティリティ
 │       ├── __init__.py
-│       ├── models.py        # データモデル
-│       ├── service.py       # ビジネスロジック
-│       └── router.py        # APIエンドポイント
+│       └── csv_manager.py   # CSVファイル管理
+├── data/                    # データファイル
+│   ├── objects.csv
+│   ├── memories.csv
+│   └── summaries.csv
 ├── requirements.txt         # 依存関係
 ├── run.py                  # 起動スクリプト
 └── README.md               # プロジェクト説明
@@ -142,6 +159,6 @@ backend/
 
 ## 注意事項
 
-- 現在はインメモリデータストレージを使用しています
-- 本番環境では適切なデータベースを使用してください
+- CSVファイルは自動的に作成・管理されます
+- データは永続化されるため、サーバー再起動後も保持されます
 - CORS設定は開発用に設定されています。本番環境では適切に設定してください 
