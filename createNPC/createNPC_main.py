@@ -22,6 +22,35 @@ def main(page: ft.Page):
     # 選択中のカラーブロックを追跡するための変数
     selected_color_block = None
 
+    # キャラクター情報の入力フィールド
+    character_name_field = ft.TextField(
+        hint_text="キャラクター名",
+        width=300,
+        multiline=False,
+        bgcolor=ft.Colors.WHITE,
+        color=ft.Colors.BLACK,
+        border_color=ft.Colors.BLUE_GREY_300,
+        focused_border_color=ft.Colors.BLUE_ACCENT,
+        filled=True,
+        dense=True,
+        content_padding=ft.padding.symmetric(horizontal=12, vertical=16),
+    )
+    
+    character_description_field = ft.TextField(
+        hint_text="キャラクターの説明",
+        width=300,
+        multiline=True,
+        min_lines=5,
+        max_lines=10,
+        bgcolor=ft.Colors.WHITE,
+        color=ft.Colors.BLACK,
+        border_color=ft.Colors.BLUE_GREY_300,
+        focused_border_color=ft.Colors.BLUE_ACCENT,
+        filled=True,
+        dense=True,
+        content_padding=ft.padding.symmetric(horizontal=12, vertical=16),
+    )
+
     # ピクセル描画用のコンテナを生成する関数 (修正)
     def create_pixel(row, col):
         def on_pixel_click(e):
@@ -161,8 +190,8 @@ def main(page: ft.Page):
                     canvas_grid.controls[r].controls[c].content.bgcolor = canvas_data[r][c]
             page.update()
 
-    # 保存機能 (変更なし)
-    def save_image(e):
+    # キャラクター登録機能 (変更)
+    def register_character(e):
         ## todo ## 
         # 実行ファイル化した時のパスをうまいことする
         file_path = "dot_image.py"
@@ -177,24 +206,137 @@ def main(page: ft.Page):
                     rgb_row.append(rgb)
                 f.write(f"    {rgb_row},\n")
             f.write("]\n")
-        page.snack_bar = ft.SnackBar(ft.Text(f"画像を {file_path} に保存しました！"))
+        
+        # キャラクター情報の取得
+        character_name = character_name_field.value or "名前未設定"
+        character_description = character_description_field.value or "説明なし"
+        
+        # DB登録処理（仮実装）
+        # TODO: 実際のDB登録処理を実装する
+        register_to_database(character_name, character_description, file_path)
+        
+        page.snack_bar = ft.SnackBar(ft.Text(f"キャラクター「{character_name}」を登録しました！"))
         page.snack_bar.open = True
         page.update()
 
+    # DB登録の仮関数
+    def register_to_database(name, description, image_path):
+        """
+        キャラクター情報をデータベースに登録する（仮実装）
+        TODO: 実際のDB接続・登録処理を実装
+        """
+        print(f"DB登録 - 名前: {name}, 説明: {description}, 画像: {image_path}")
+        # ここに実際のDB登録処理を実装予定
+
     # UIのレイアウト (修正)
-    page.add(
-        canvas_with_drag,
-        ft.Divider(),
-        color_palette,
-        ft.Divider(),
-        ft.Row(
-            [
-                ft.ElevatedButton("Undo", on_click=undo_action),
-                ft.ElevatedButton("保存", on_click=save_image),
-            ],
-            alignment=ft.MainAxisAlignment.CENTER,
-            spacing=20,
-        )
+    # 左側のドット絵エディター部分
+    editor_section = ft.Column(
+        [
+            ft.Text(
+                "ドット絵エディター",
+                size=18,
+                weight=ft.FontWeight.BOLD,
+                color=ft.Colors.WHITE,
+            ),
+            ft.Container(height=10),
+            canvas_with_drag,
+            ft.Container(height=15),
+            ft.Text(
+                "カラーパレット",
+                size=14,
+                weight=ft.FontWeight.W_500,
+                color=ft.Colors.WHITE70,
+            ),
+            ft.Container(height=5),
+            color_palette,
+            ft.Container(height=20),
+            ft.Row(
+                [
+                    ft.ElevatedButton(
+                        "Undo", 
+                        on_click=undo_action,
+                        width=100,
+                        style=ft.ButtonStyle(
+                            bgcolor=ft.Colors.BLUE_GREY_700,
+                            color=ft.Colors.WHITE,
+                        )
+                    ),
+                    ft.ElevatedButton(
+                        "登録", 
+                        on_click=register_character,
+                        width=100,
+                        style=ft.ButtonStyle(
+                            bgcolor=ft.Colors.BLUE_ACCENT_700,
+                            color=ft.Colors.WHITE,
+                        )
+                    ),
+                ],
+                alignment=ft.MainAxisAlignment.CENTER,
+                spacing=20,
+            )
+        ],
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+        spacing=0,
     )
+    
+    # 右側のキャラクター情報入力フォーム
+    character_form = ft.Container(
+        content=ft.Column(
+            [
+                ft.Text(
+                    "キャラクター情報", 
+                    size=20, 
+                    weight=ft.FontWeight.BOLD,
+                    color=ft.Colors.WHITE,
+                ),
+                ft.Divider(color=ft.Colors.BLUE_GREY_400),
+                ft.Container(height=5),
+                ft.Text(
+                    "キャラクター名",
+                    size=14,
+                    color=ft.Colors.WHITE,
+                    weight=ft.FontWeight.W_500,
+                ),
+                ft.Container(height=5),
+                character_name_field,
+                ft.Container(height=20),
+                ft.Text(
+                    "説明文",
+                    size=14,
+                    color=ft.Colors.WHITE,
+                    weight=ft.FontWeight.W_500,
+                ),
+                ft.Container(height=5),
+                character_description_field,
+            ],
+            horizontal_alignment=ft.CrossAxisAlignment.START,
+            spacing=0,
+        ),
+        width=350,
+        padding=ft.padding.all(25),
+        bgcolor=ft.Colors.BLUE_GREY_900,
+        border_radius=ft.border_radius.all(12),
+        border=ft.border.all(1, ft.Colors.BLUE_GREY_600),
+    )
+    
+    # メイン画面のレイアウト
+    main_layout = ft.Row(
+        [
+            ft.Container(
+                content=editor_section,
+                padding=ft.padding.all(5),
+            ),
+            ft.VerticalDivider(color=ft.Colors.BLUE_GREY_600),
+            ft.Container(
+                content=character_form,
+                padding=ft.padding.all(5),
+            ),
+        ],
+        alignment=ft.MainAxisAlignment.CENTER,
+        vertical_alignment=ft.CrossAxisAlignment.START,
+        spacing=20,
+    )
+    
+    page.add(main_layout)
 
 ft.app(target=main)
