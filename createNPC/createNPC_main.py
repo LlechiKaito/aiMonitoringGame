@@ -1,6 +1,8 @@
 import flet as ft
 
-def main(page: ft.Page):
+def createNPC_main(page: ft.Page, back_callback=None):
+    page.controls.clear()
+
     page.title = "ドット絵エディター"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
@@ -270,6 +272,15 @@ def main(page: ft.Page):
                             color=ft.Colors.WHITE,
                         )
                     ),
+                    ft.ElevatedButton(
+                        "戻る", 
+                        on_click=lambda e: back_callback() if back_callback else None,
+                        width=100,
+                        style=ft.ButtonStyle(
+                            bgcolor=ft.Colors.ORANGE_ACCENT_700,
+                            color=ft.Colors.WHITE,
+                        )
+                    ),
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,
                 spacing=20,
@@ -338,5 +349,3 @@ def main(page: ft.Page):
     )
     
     page.add(main_layout)
-
-ft.app(target=main)

@@ -6,6 +6,7 @@ import socket
 import gameEngine.pyxel_app as pyxel_app  # 作成したPyxelモジュールをインポート
 from objects.object_list import object_list
 from chat.chat_main import chat_main
+from createNPC.createNPC_main import createNPC_main
 
 def main(page: ft.Page):
     # --- ページ基本設定 ---
@@ -28,9 +29,10 @@ def main(page: ft.Page):
         input_btn = ft.ElevatedButton("文字列入力", on_click=show_input_screen)
         list_btn = ft.ElevatedButton("リスト", on_click=lambda e: object_list(page, show_initial_screen))
         sample2_btn = ft.ElevatedButton("チャット", on_click=lambda e: chat_main(page, show_initial_screen))
+        create_npc_btn = ft.ElevatedButton("NPC作成", on_click=lambda e: createNPC_main(page, show_initial_screen))
         page.add(
             ft.Column(
-                [pyxel_btn, input_btn, list_btn, sample2_btn],
+                [pyxel_btn, input_btn, list_btn, sample2_btn, create_npc_btn],
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 spacing=20
             )
