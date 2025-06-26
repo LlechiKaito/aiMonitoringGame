@@ -3,7 +3,8 @@
 import pyxel
 import socket
 import threading
-from gameEngine.player import Player  # 追加
+from gameEngine.player import Player
+from dot_image import image_data  # 追加
 
 def run_pyxel_app():
     """Pyxelアプリケーションを初期化し、実行するメイン関数"""
@@ -26,10 +27,27 @@ def run_pyxel_app():
         finally:
             sock.close()
 
+    def load_dot_image():
+        """dot_imageをPyxelのイメージバンクに登録する"""
+        for y in range(16):
+            for x in range(16):
+                r, g, b = image_data[y][x]
+                # RGB値をPyxelのカラーインデックスに変換
+                if (r, g, b) == (255, 255, 255):  # 白
+                    color = 7
+                elif (r, g, b) == (255, 255, 0):  # 黄色
+                    color = 10
+                elif (r, g, b) == (0, 0, 255):  # 青
+                    color = 12
+                else:
+                    color = 0  # 黒（デフォルト）
+                pyxel.images[1].pset(x, y, color)  # イメージバンク1番を使用
+
     class App:
         def __init__(self):
             pyxel.init(200, 100, title="Pyxel受信画面")
             pyxel.load("sample.pyxres")  # 追加: 背景リソースを読み込む
+            load_dot_image()  # ドット絵をロード
             self.message = ""
             self.player = Player()  # プレイヤー生成
             threading.Thread(target=udp_listener, daemon=True).start()
