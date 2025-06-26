@@ -252,39 +252,15 @@ def createNPC_main(page: ft.Page, back_callback=None):
             ft.Container(height=5),
             color_palette,
             ft.Container(height=20),
-            ft.Row(
-                [
-                    ft.ElevatedButton(
-                        "Undo", 
-                        on_click=undo_action,
-                        width=100,
-                        style=ft.ButtonStyle(
-                            bgcolor=ft.Colors.BLUE_GREY_700,
-                            color=ft.Colors.WHITE,
-                        )
-                    ),
-                    ft.ElevatedButton(
-                        "登録", 
-                        on_click=register_character,
-                        width=100,
-                        style=ft.ButtonStyle(
-                            bgcolor=ft.Colors.BLUE_ACCENT_700,
-                            color=ft.Colors.WHITE,
-                        )
-                    ),
-                    ft.ElevatedButton(
-                        "戻る", 
-                        on_click=lambda e: back_callback() if back_callback else None,
-                        width=100,
-                        style=ft.ButtonStyle(
-                            bgcolor=ft.Colors.ORANGE_ACCENT_700,
-                            color=ft.Colors.WHITE,
-                        )
-                    ),
-                ],
-                alignment=ft.MainAxisAlignment.CENTER,
-                spacing=20,
-            )
+            ft.ElevatedButton(
+                "Undo", 
+                on_click=undo_action,
+                width=100,
+                style=ft.ButtonStyle(
+                    bgcolor=ft.Colors.BLUE_GREY_700,
+                    color=ft.Colors.WHITE,
+                )
+            ),
         ],
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         spacing=0,
@@ -330,22 +306,55 @@ def createNPC_main(page: ft.Page, back_callback=None):
         border=ft.border.all(1, ft.Colors.BLUE_GREY_600),
     )
     
+    controller_section = ft.Container(
+        ft.Row(
+            [
+                ft.ElevatedButton(
+                    "登録", 
+                    on_click=register_character,
+                    width=100,
+                    style=ft.ButtonStyle(
+                        bgcolor=ft.Colors.BLUE_ACCENT_700,
+                        color=ft.Colors.WHITE,
+                    )
+                ),
+                ft.ElevatedButton(
+                    "戻る", 
+                    on_click=lambda e: back_callback() if back_callback else None,
+                    width=100,
+                    style=ft.ButtonStyle(
+                        bgcolor=ft.Colors.ORANGE_ACCENT_700,
+                        color=ft.Colors.WHITE,
+                    )
+                ),
+            ],        
+            alignment=ft.MainAxisAlignment.CENTER,
+            vertical_alignment=ft.CrossAxisAlignment.START,
+            spacing=20,
+            ),
+    )
+
     # メイン画面のレイアウト
-    main_layout = ft.Row(
+    main_layout = ft.Column(
         [
-            ft.Container(
-                content=editor_section,
-                padding=ft.padding.all(5),
+            ft.Row(
+            [
+                ft.Container(
+                    content=editor_section,
+                    padding=ft.padding.all(5),
+                ),
+                ft.VerticalDivider(color=ft.Colors.BLUE_GREY_600),
+                ft.Container(
+                    content=character_form,
+                    padding=ft.padding.all(5),
+                ),
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
+            vertical_alignment=ft.CrossAxisAlignment.START,
+            spacing=20,
             ),
-            ft.VerticalDivider(color=ft.Colors.BLUE_GREY_600),
-            ft.Container(
-                content=character_form,
-                padding=ft.padding.all(5),
-            ),
+            controller_section,
         ],
-        alignment=ft.MainAxisAlignment.CENTER,
-        vertical_alignment=ft.CrossAxisAlignment.START,
-        spacing=20,
     )
     
     page.add(main_layout)
