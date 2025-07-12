@@ -1,5 +1,5 @@
 from .models import Summary, SummaryCreate, SummaryUpdate, SummaryQuery
-from .service import SummaryService, summary_service
+from .service import SummaryService, get_summary_service
 from .router import router
 
 __all__ = [
@@ -8,6 +8,6 @@ __all__ = [
     "SummaryUpdate",
     "SummaryQuery",
     "SummaryService",
-    "summary_service",
+    "get_summary_service",
     "router"
 ] 

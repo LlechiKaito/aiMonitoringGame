@@ -4,12 +4,12 @@ from datetime import datetime
 
 # Summariesモデルの詳細
 class Summary(BaseModel):
-    id: Optional[int] = None
+    id: int  # レスポンスモデルなので常にIDが存在
     object_id: int
     key_features: str
     current_daily_tasks: str
     recent_progress_feelings: str
-    created_at: Optional[datetime] = None
+    created_at: datetime  # 作成時に必ず設定される
 
 # 作成のリクエストパラメーター
 class SummaryCreate(BaseModel):
