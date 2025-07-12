@@ -6,6 +6,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
+# データベース関連のインポート
+from utils.database import create_tables
+# すべてのデータベースモデルをインポート（テーブル作成のため）
+from utils.db_models import ObjectDB, MemoryDB, SummaryDB
+
 # memoriesモジュールをインポート
 from memories import router as memories_router
 # objectsモジュールをインポート
@@ -28,6 +33,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# アプリケーション起動時にデータベースを初期化
+@app.on_event("startup")
+async def startup_event():
+    # データベーステーブルを作成
+    create_tables()
 
 # memoriesルーターを追加
 app.include_router(memories_router)
