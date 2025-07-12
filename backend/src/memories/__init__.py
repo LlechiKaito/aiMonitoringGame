@@ -1,5 +1,5 @@
 from .models import Memory, MemoryCreate, MemoryUpdate, MemoryQuery
-from .service import MemoryService, memory_service
+from .service import MemoryService, get_memory_service
 from .router import router
 
 __all__ = [
@@ -8,6 +8,6 @@ __all__ = [
     "MemoryUpdate",
     "MemoryQuery",
     "MemoryService",
-    "memory_service",
+    "get_memory_service",
     "router"
 ] 

@@ -4,12 +4,12 @@ from datetime import datetime
 
 # Memoriesモデルの詳細
 class Memory(BaseModel):
-    id: Optional[int] = None
+    id: int  # レスポンスモデルなので常にIDが存在
     object_id: int
     content: str
     importance: float = 0.5
-    timestamp: Optional[datetime] = None
-    last_accessed: Optional[datetime] = None
+    timestamp: datetime  # 作成時に必ず設定される
+    last_accessed: datetime  # 作成・取得時に必ず設定される
 
 # 作成のリクエストパラメーター
 class MemoryCreate(BaseModel):
@@ -25,5 +25,4 @@ class MemoryUpdate(BaseModel):
 # 取得のリクエストパラメーター
 class MemoryQuery(BaseModel):
     object_id: int
-    min_importance: Optional[float] = None
     limit: Optional[int] = 10
