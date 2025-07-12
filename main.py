@@ -26,41 +26,12 @@ def main(page: ft.Page):
         """
         page.controls.clear()
         pyxel_btn = ft.ElevatedButton("Pyxel起動", on_click=on_start_pyxel)
-        input_btn = ft.ElevatedButton("文字列入力", on_click=show_input_screen)
         list_btn = ft.ElevatedButton("リスト", on_click=lambda e: object_list(page, show_initial_screen))
         sample2_btn = ft.ElevatedButton("チャット", on_click=lambda e: chat_main(page, show_initial_screen))
         create_npc_btn = ft.ElevatedButton("NPC作成", on_click=lambda e: createNPC_main(page, show_initial_screen))
         page.add(
             ft.Column(
-                [pyxel_btn, input_btn, list_btn, sample2_btn, create_npc_btn],
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                spacing=20
-            )
-        )
-        page.update()
-
-    def show_input_screen(e=None):
-        """
-        文字列入力画面を表示する関数。
-        入力内容をUDPで送信可能。
-        """
-        page.controls.clear()
-        text_field = ft.TextField(
-            label="メッセージを入力してください...",
-            width=300
-        )
-        def on_send(ev):
-            # 入力内容をUDPで送信
-            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            sock.sendto(text_field.value.encode("utf-8"), ("127.0.0.1", 50007))
-            sock.close() 
-            text_field.value = ""
-            text_field.update()
-        send_btn = ft.ElevatedButton("送信", on_click=on_send)
-        back_btn = ft.ElevatedButton("戻る", on_click=lambda e: show_initial_screen())
-        page.add(
-            ft.Column(
-                [text_field, ft.Row([send_btn, back_btn], alignment=ft.MainAxisAlignment.CENTER)],
+                [pyxel_btn, list_btn, sample2_btn, create_npc_btn],
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 spacing=20
             )
