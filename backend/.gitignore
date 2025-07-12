@@ -3,7 +3,7 @@
 # ===================================
 
 # データベースファイル
-data/
+data/aimonitoringgame.db
 *.db
 *.sqlite
 *.sqlite3
