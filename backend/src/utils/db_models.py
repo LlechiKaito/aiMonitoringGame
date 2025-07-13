@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Text
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text
 from sqlalchemy.orm import relationship
 from .database import Base
 from datetime import datetime
+import pytz
 
 class ObjectDB(Base):
     __tablename__ = "objects"
@@ -22,9 +23,9 @@ class MemoryDB(Base):
     id = Column(Integer, primary_key=True, index=True)
     object_id = Column(Integer, ForeignKey("objects.id"), nullable=False)
     content = Column(String, nullable=False)
-    importance = Column(Float, default=0.5)
-    timestamp = Column(DateTime, default=datetime.utcnow)
-    last_accessed = Column(DateTime, default=datetime.utcnow)
+    importance = Column(Integer, default=5)
+    timestamp = Column(DateTime, default=lambda: datetime.now(pytz.timezone('Asia/Tokyo')))
+    last_accessed = Column(DateTime, default=lambda: datetime.now(pytz.timezone('Asia/Tokyo')))
     
     # リレーションシップ
     object = relationship("ObjectDB", back_populates="memories")
@@ -37,7 +38,7 @@ class SummaryDB(Base):
     key_features = Column(String, nullable=False)
     current_daily_tasks = Column(String, nullable=False)
     recent_progress_feelings = Column(String, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(pytz.timezone('Asia/Tokyo')))
     
     # リレーションシップ
     object = relationship("ObjectDB", back_populates="summaries") 
