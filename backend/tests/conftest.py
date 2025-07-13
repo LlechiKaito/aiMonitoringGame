@@ -11,6 +11,7 @@ sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__f
 
 from utils.database import Base, get_db
 from utils.db_models import ObjectDB, MemoryDB, SummaryDB
+import pytz
 
 # テスト用データベースの設定
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
@@ -53,9 +54,9 @@ def sample_memory(db_session, sample_object):
     memory = MemoryDB(
         object_id=sample_object.id,
         content="テストメモリ",
-        importance=0.5,
-        timestamp=datetime.now(),
-        last_accessed=datetime.now()
+        importance=5,
+        timestamp=datetime.now(pytz.timezone('Asia/Tokyo')),
+        last_accessed=datetime.now(pytz.timezone('Asia/Tokyo'))
     )
     db_session.add(memory)
     db_session.commit()
@@ -71,7 +72,7 @@ def sample_summary(db_session, sample_object):
         key_features="テスト特徴",
         current_daily_tasks="テストタスク",
         recent_progress_feelings="テスト感情",
-        created_at=datetime.now()
+        created_at=datetime.now(pytz.timezone('Asia/Tokyo'))
     )
     db_session.add(summary)
     db_session.commit()
