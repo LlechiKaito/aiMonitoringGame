@@ -4,7 +4,7 @@ class Player:
     def __init__(self, x=100, y=50):
         self.x = x
         self.y = y
-        self.size = 8  # プレイヤーのサイズ
+        self.size = 16  # ドット絵のサイズに合わせて変更
         self.dx = random.choice([-2, 2])
         self.dy = random.choice([-2, 2])
 
@@ -21,4 +21,5 @@ class Player:
 
     def draw(self):
         import pyxel
-        pyxel.rect(self.x, self.y, self.size, self.size, 11)  # 水色の四角
+        # イメージバンク1番からドット絵を描画
+        pyxel.blt(self.x, self.y, 1, 0, 0, 16, 16)
