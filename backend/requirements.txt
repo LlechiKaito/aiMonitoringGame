@@ -7,3 +7,4 @@ alembic>=1.13.0
 pytest>=8.4.1
 pytest-asyncio>=1.0.0
 requests>=2.32.4
+pytz>=2024.1
