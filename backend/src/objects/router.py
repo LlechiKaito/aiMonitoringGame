@@ -17,10 +17,7 @@ async def create_object(object_data: ObjectCreate, db: Session = Depends(get_db)
 @router.get("/{object_id}", response_model=Object)
 async def get_object(object_id: int, db: Session = Depends(get_db)):
     object_service = get_object_service(db)
-    obj = object_service.get_object(object_id)
-    if not obj:
-        raise HTTPException(status_code=404, detail="Object not found")
-    return obj
+    return object_service.get_object(object_id)
 
 # レコードの取得（複数）
 @router.get("/", response_model=List[Object])
@@ -40,18 +37,13 @@ async def get_objects(
 @router.put("/{object_id}", response_model=Object)
 async def update_object(object_id: int, update_data: ObjectUpdate, db: Session = Depends(get_db)):
     object_service = get_object_service(db)
-    obj = object_service.update_object(object_id, update_data)
-    if not obj:
-        raise HTTPException(status_code=404, detail="Object not found")
-    return obj
+    return object_service.update_object(object_id, update_data)
 
 # レコードの削除
 @router.delete("/{object_id}")
 async def delete_object(object_id: int, db: Session = Depends(get_db)):
     object_service = get_object_service(db)
-    success = object_service.delete_object(object_id)
-    if not success:
-        raise HTTPException(status_code=404, detail="Object not found")
+    object_service.delete_object(object_id)
     return {"message": f"Object {object_id} deleted successfully"}
 
 # オブジェクトに関連するメモリを取得
@@ -65,8 +57,6 @@ async def get_object_memories(
     object_service = get_object_service(db)
     # オブジェクトの存在確認
     obj = object_service.get_object(object_id)
-    if not obj:
-        raise HTTPException(status_code=404, detail="Object not found")
     
     memories = object_service.get_object_memories(object_id, limit)
     return {
@@ -87,8 +77,6 @@ async def get_object_summaries(
     object_service = get_object_service(db)
     # オブジェクトの存在確認
     obj = object_service.get_object(object_id)
-    if not obj:
-        raise HTTPException(status_code=404, detail="Object not found")
     
     summaries = object_service.get_object_summaries(object_id, limit)
     return {
@@ -108,8 +96,4 @@ async def get_object_details(
 ):
     """オブジェクトの詳細情報を取得（メモリとサマリーを含む）"""
     object_service = get_object_service(db)
-    details = object_service.get_object_details(object_id, memory_limit, summary_limit)
-    if not details:
-        raise HTTPException(status_code=404, detail="Object not found")
-    
-    return details 
+    return object_service.get_object_details(object_id, memory_limit, summary_limit) 
