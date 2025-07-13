@@ -17,10 +17,7 @@ async def create_summary(summary_data: SummaryCreate, db: Session = Depends(get_
 @router.get("/{summary_id}", response_model=Summary)
 async def get_summary(summary_id: int, db: Session = Depends(get_db)):
     summary_service = get_summary_service(db)
-    summary = summary_service.get_summary(summary_id)
-    if not summary:
-        raise HTTPException(status_code=404, detail="Summary not found")
-    return summary
+    return summary_service.get_summary(summary_id)
 
 # レコードの取得（複数）
 @router.get("/", response_model=List[Summary])
@@ -40,16 +37,11 @@ async def get_summaries(
 @router.put("/{summary_id}", response_model=Summary)
 async def update_summary(summary_id: int, update_data: SummaryUpdate, db: Session = Depends(get_db)):
     summary_service = get_summary_service(db)
-    summary = summary_service.update_summary(summary_id, update_data)
-    if not summary:
-        raise HTTPException(status_code=404, detail="Summary not found")
-    return summary
+    return summary_service.update_summary(summary_id, update_data)
 
 # レコードの削除
 @router.delete("/{summary_id}")
 async def delete_summary(summary_id: int, db: Session = Depends(get_db)):
     summary_service = get_summary_service(db)
-    success = summary_service.delete_summary(summary_id)
-    if not success:
-        raise HTTPException(status_code=404, detail="Summary not found")
+    summary_service.delete_summary(summary_id)
     return {"message": f"Summary {summary_id} deleted successfully"} 
