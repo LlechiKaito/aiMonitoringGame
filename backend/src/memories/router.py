@@ -17,10 +17,7 @@ async def create_memory(memory_data: MemoryCreate, db: Session = Depends(get_db)
 @router.get("/{memory_id}", response_model=Memory)
 async def get_memory(memory_id: int, db: Session = Depends(get_db)):
     memory_service = get_memory_service(db)
-    memory = memory_service.get_memory(memory_id)
-    if not memory:
-        raise HTTPException(status_code=404, detail="Memory not found")
-    return memory
+    return memory_service.get_memory(memory_id)
 
 # レコードの取得（複数）
 @router.get("/", response_model=List[Memory])
@@ -40,16 +37,11 @@ async def get_memories(
 @router.put("/{memory_id}", response_model=Memory)
 async def update_memory(memory_id: int, update_data: MemoryUpdate, db: Session = Depends(get_db)):
     memory_service = get_memory_service(db)
-    memory = memory_service.update_memory(memory_id, update_data)
-    if not memory:
-        raise HTTPException(status_code=404, detail="Memory not found")
-    return memory
+    return memory_service.update_memory(memory_id, update_data)
 
 # レコードの削除
 @router.delete("/{memory_id}")
 async def delete_memory(memory_id: int, db: Session = Depends(get_db)):
     memory_service = get_memory_service(db)
-    success = memory_service.delete_memory(memory_id)
-    if not success:
-        raise HTTPException(status_code=404, detail="Memory not found")
+    memory_service.delete_memory(memory_id)
     return {"message": f"Memory {memory_id} deleted successfully"}
