@@ -7,6 +7,8 @@ from utils.db_models import MemoryDB, ObjectDB
 from utils.database import get_db
 import pytz
 
+from src.utils.memories_search import MemoriesSearch
+
 class MemoryService:
     def __init__(self, db: Session):
         self.db = db
@@ -89,41 +91,83 @@ class MemoryService:
 
     # レコードの取得（複数）
     def get_memories(self, query: MemoryQuery) -> List[Memory]:
-        db_query = self.db.query(MemoryDB).filter(MemoryDB.object_id == query.object_id)
+        # object_idが空の場合は400エラー
+        if not query.object_id:
+            raise HTTPException(
+                status_code=400,
+                detail="Object ID is required"
+            )
         
-        # 重要度と最後のアクセス時間でソート
-        db_query = db_query.order_by(MemoryDB.importance.desc(), MemoryDB.last_accessed.desc())
+        # クエリが空の場合は400エラー
+        if not query.query:
+            raise HTTPException(
+                status_code=400,
+                detail="Query is required"
+            )
         
-        if query.limit:
-            db_query = db_query.limit(query.limit)
+        # スペースと空白のみの場合は400エラー
+        if query.query.strip() == "":
+            raise HTTPException(
+                status_code=400,
+                detail="Query cannot be only spaces or whitespace"
+            )
         
-        db_memories = db_query.all()
+        # クエリが200文字以上の場合は400エラー
+        if len(query.query) > 200:
+            raise HTTPException(
+                status_code=400,
+                detail="Query must be less than 50 characters"
+            )
+            
+        # 取得件数が1から10の範囲内であることを確認
+        if query.limit < 1 or query.limit > 10:
+            raise HTTPException(
+                status_code=400,
+                detail="Limit must be between 1 and 10"
+            )
         
-        # 結果が空の場合は404エラーを発生
-        if not db_memories:
+        # データベースからメモリを取得
+        db_memories = self.db.query(MemoryDB).filter(MemoryDB.object_id == query.object_id).all()
+        
+        # データベースオブジェクトを辞書形式に変換
+        memories_data = []
+        for db_memory in db_memories:
+            memories_data.append({
+                "id": db_memory.id,
+                "object_id": db_memory.object_id,
+                "content": db_memory.content,
+                "timestamp": db_memory.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
+                "importance": db_memory.importance,
+                "last_accessed": db_memory.last_accessed.strftime('%Y-%m-%d %H:%M:%S')
+            })
+
+        # メモリが存在しない場合は404エラー
+        if not memories_data:
             raise HTTPException(
                 status_code=404,
                 detail=f"No memories found for object_id {query.object_id}"
             )
+
+        # MemoriesSearchを使用して検索
+        memories_search_result = MemoriesSearch(memories_data, top_n=query.limit)
+        search_result = memories_search_result.search(query.query)
         
-        # 取得したすべてのmemoryのlast_accessedを更新
-        current_time = datetime.now(pytz.timezone('Asia/Tokyo'))
-        for db_memory in db_memories:
-            db_memory.last_accessed = current_time
-        
-        self.db.commit()
-        
-        return [
-            Memory(
+        # 検索結果からMemoryオブジェクトを作成
+        result_memories = []
+        for memory_data in search_result['memory']:
+            # 元のデータベースオブジェクトを取得
+            db_memory = next(m for m in db_memories if m.id == memory_data['id'])
+            
+            result_memories.append(Memory(
                 id=db_memory.id,
                 object_id=db_memory.object_id,
                 content=db_memory.content,
                 importance=db_memory.importance,
                 timestamp=db_memory.timestamp,
                 last_accessed=db_memory.last_accessed
-            )
-            for db_memory in db_memories
-        ]
+            ))
+        
+        return result_memories
 
     # レコードの更新
     def update_memory(self, memory_id: int, update_data: MemoryUpdate) -> Memory:

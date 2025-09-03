@@ -22,13 +22,15 @@ async def get_memory(memory_id: int, db: Session = Depends(get_db)):
 # レコードの取得（複数）
 @router.get("/", response_model=List[Memory])
 async def get_memories(
-    object_id: int = Query(..., description="オブジェクトID"),
-    limit: Optional[int] = Query(10, description="取得件数制限"),
+    object_id: Optional[int] = Query(None, description="オブジェクトID"),
+    query: Optional[str] = Query(None, description="検索クエリ"),
+    limit: Optional[int] = Query(5, description="取得件数制限"),
     db: Session = Depends(get_db)
 ):
     memory_service = get_memory_service(db)
     query = MemoryQuery(
         object_id=object_id,
+        query=query,
         limit=limit
     )
     return memory_service.get_memories(query)

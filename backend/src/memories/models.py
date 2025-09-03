@@ -24,5 +24,6 @@ class MemoryUpdate(BaseModel):
 
 # 取得のリクエストパラメーター
 class MemoryQuery(BaseModel):
-    object_id: int
-    limit: Optional[int] = 10
+    object_id: Optional[int] = None
+    query: Optional[str] = None
+    limit: Optional[int] = 5

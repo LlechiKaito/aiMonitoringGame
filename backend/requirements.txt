@@ -1,10 +1,31 @@
+# AI Monitoring Game Backend - 統一依存関係
+# CPU環境対応（GPU環境でも動作）
+
+# === Webフレームワーク ===
 fastapi>=0.115.0
 uvicorn[standard]>=0.30.0
 pydantic>=2.10.0
-python-multipart>=0.0.6 
+python-multipart>=0.0.6
+
+# === データベース ===
 sqlalchemy>=2.0.0
-alembic>=1.13.0 
+alembic>=1.13.0
+
+# === テスト ===
 pytest>=8.4.1
 pytest-asyncio>=1.0.0
+
+# === ユーティリティ ===
 requests>=2.32.4
 pytz>=2024.1
+
+# === AI・機械学習（CPU/GPU両対応） ===
+torch>=2.2.0                     # CPU/GPU両対応
+sentence-transformers>=3.0.0     # CPU/GPU両対応
+numpy>=1.24.0                    # CPU
+scikit-learn>=1.3.0             # CPU
+google-generativeai>=0.3.0       # API（CPU）
+
+# === GPU専用（コメントアウト） ===
+# flash-attn>=2.8.1              # ⚠️ GPU必須: Linux + CUDA 12.0+
+#                                 # 必要な場合: pip install flash-attn --no-build-isolation
